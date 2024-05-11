@@ -51,7 +51,7 @@ private:
     return node;
   };
 
-  void leastInTheRight(Node *target, Node *prev, bool isLeft) {
+  void deletePriv(Node *target, Node *prev, bool isLeft) {
     Node *prevPtr = NULL;
     Node *ptr = target->right;
     while (ptr->left != NULL) {
@@ -59,9 +59,13 @@ private:
       ptr = ptr->left;
     }
     prevPtr->left = ptr->right;
-    ptr->right = prevPtr;
+    ptr->right = target->right;
     ptr->left = target->left;
-    (isLeft) ? prev->left = ptr : prev->right = ptr;
+    if (prev) {
+      (isLeft) ? prev->left = ptr : prev->right = ptr;
+    } else {
+      root = ptr;
+    }
     target = ptr;
     return;
   }
@@ -92,7 +96,7 @@ public:
 
     // do with multiple chilren
     if (current->left && current->right) {
-      leastInTheRight(current, prev, isLeft);
+      deletePriv(current, prev, isLeft);
     }
     // do with one child
     else if (current->left) {
@@ -144,13 +148,11 @@ int main() {
   tree->insert(10);
   tree->insert(-80);
   tree->insert(11);
-  cout << tree->deleteNode(9) << endl;
-  cout << tree->deleteNode(10) << endl;
-  cout << tree->deleteNode(2) << endl;
+  cout << tree->deleteNode(6) << endl;
   prettyPrint(tree->root);
 
-  Node *eleven = tree->find(8);
-  cout << eleven->left->data;
+  // Node *eleven = tree->find(6);
+  // cout << eleven->left->data;
 
   return 0;
 }
