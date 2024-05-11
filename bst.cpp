@@ -51,6 +51,21 @@ private:
     return node;
   };
 
+  void leastInTheRight(Node *target, Node *prev, bool isLeft) {
+    Node *prevPtr = NULL;
+    Node *ptr = target->right;
+    while (ptr->left != NULL) {
+      prevPtr = ptr;
+      ptr = ptr->left;
+    }
+    prevPtr->left = ptr->right;
+    ptr->right = prevPtr;
+    ptr->left = target->left;
+    (isLeft) ? prev->left = ptr : prev->right = ptr;
+    target = ptr;
+    return;
+  }
+
 public:
   Node *root;
   Tree(vector<int> arr) { this->root = buildTree(arr); };
@@ -77,7 +92,7 @@ public:
 
     // do with multiple chilren
     if (current->left && current->right) {
-      cout << "Di pa nagagawa toh. " << endl;
+      leastInTheRight(current, prev, isLeft);
     }
     // do with one child
     else if (current->left) {
@@ -87,7 +102,7 @@ public:
       (isLeft) ? prev->left = current->right : prev->right = current->right;
     }
     // do with no child -- DONE
-    else {
+    else if (!(current->left && current->right)) {
       (isLeft) ? prev->left = NULL : prev->right = NULL;
     }
     return true;
@@ -115,9 +130,10 @@ int main() {
   tree->insert(30);
   tree->insert(10);
   tree->insert(-80);
-  cout << tree->deleteNode(4) << endl;
+  tree->insert(11);
+  cout << tree->deleteNode(9) << endl;
   cout << tree->deleteNode(10) << endl;
-  cout << tree->deleteNode(3289) << endl;
+  cout << tree->deleteNode(2) << endl;
   prettyPrint(tree->root);
 
   return 0;
