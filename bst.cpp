@@ -107,6 +107,19 @@ public:
     }
     return true;
   };
+  Node *find(int value) {
+    Node *ptr = root;
+    if (!ptr) {
+      return NULL;
+    }
+    while (ptr != NULL) {
+      if (ptr->data == value) {
+        return ptr;
+      }
+      (ptr->data > value) ? ptr = ptr->left : ptr = ptr->right;
+    }
+    return ptr;
+  };
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -135,6 +148,9 @@ int main() {
   cout << tree->deleteNode(10) << endl;
   cout << tree->deleteNode(2) << endl;
   prettyPrint(tree->root);
+
+  Node *eleven = tree->find(8);
+  cout << eleven->left->data;
 
   return 0;
 }
