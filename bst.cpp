@@ -124,6 +124,11 @@ public:
     }
     return ptr;
   };
+  vector<int> breadthFirstTraversal() {
+    vector<int> arr;
+    // do stuff here
+    return arr;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
