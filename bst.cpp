@@ -94,11 +94,11 @@ public:
     if (!current)
       return false;
 
-    // do with multiple chilren
+    // do with multiple chilren -- DONE
     if (current->left && current->right) {
       deletePriv(current, prev, isLeft);
     }
-    // do with one child
+    // do with one child -- DONE
     else if (current->left) {
       (isLeft) ? prev->left = current->left : prev->right = current->left;
 
@@ -125,8 +125,22 @@ public:
     return ptr;
   };
   vector<int> breadthFirstTraversal() {
-    vector<int> arr;
     // do stuff here
+    vector<Node *> queue;
+    vector<int> arr;
+    queue.push_back(root);
+    Node *ptr;
+    for (int i = 0; i < queue.size(); i++) {
+      ptr = queue[i];
+      if (ptr->left) {
+        queue.push_back(ptr->left);
+      }
+      if (ptr->right) {
+        queue.push_back(ptr->right);
+      }
+      arr.push_back(ptr->data);
+    }
+
     return arr;
   }
 };
@@ -155,7 +169,14 @@ int main() {
   tree->insert(11);
   cout << tree->deleteNode(6) << endl;
   prettyPrint(tree->root);
+  vector<int> bft = tree->breadthFirstTraversal();
 
+  cout << "This is the breadthFirstTraversal: " << endl;
+  for (int i : bft) {
+    cout << i << " ";
+  }
+
+  cout << endl;
   // Node *eleven = tree->find(6);
   // cout << eleven->left->data;
 
