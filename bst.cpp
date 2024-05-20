@@ -70,6 +70,26 @@ private:
     return;
   }
 
+  // DF Traversal
+  void inorder(Node *ptr, vector<Node *> &stack, vector<int> &res) {
+    if (ptr) {
+      stack.push_back(ptr);
+      return inorder(ptr->left, stack, res);
+    }
+    if (stack.size() > 0 && stack[stack.size() - 1]->right) {
+      Node *right = stack[stack.size() - 1]->right;
+      res.push_back(stack[stack.size() - 1]->data);
+      stack.pop_back();
+      return inorder(right, stack, res);
+    } else if (stack.size() > 0) {
+      res.push_back(stack[stack.size() - 1]->data);
+      stack.pop_back();
+      return inorder(ptr, stack, res);
+    } else { // base case
+      return;
+    }
+  }
+
 public:
   Node *root;
   Tree(vector<int> arr) { this->root = buildTree(arr); };
@@ -143,6 +163,13 @@ public:
 
     return arr;
   }
+  vector<int> inorderTraversal() {
+    vector<int> res;
+    vector<Node *> stack;
+    Node *ptr = root;
+    inorder(ptr, stack, res);
+    return res;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -167,7 +194,6 @@ int main() {
   tree->insert(10);
   tree->insert(-80);
   tree->insert(11);
-  cout << tree->deleteNode(6) << endl;
   prettyPrint(tree->root);
   vector<int> bft = tree->breadthFirstTraversal();
 
@@ -176,7 +202,15 @@ int main() {
     cout << i << " ";
   }
 
+  cout << endl << endl;
+
+  vector<int> inorder = tree->inorderTraversal();
+  cout << "This is the inorder traversal" << endl;
+  for (int i : inorder) {
+    cout << i << " ";
+  }
   cout << endl;
+
   // Node *eleven = tree->find(6);
   // cout << eleven->left->data;
 
