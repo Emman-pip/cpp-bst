@@ -17,8 +17,8 @@ struct Node {
 };
 
 // TODO:
-// 1. depth of the tree of a value
-// 2. height of the tree
+// 1. depth of the tree of a value -- number of edges of a node from the root.
+// 2. height of the node -- longest distance of a node from a leaf node.
 // 3. balance the tree
 // 4.
 
@@ -234,6 +234,20 @@ public:
     vector<int> ordered = inorderTraversal();
     root = buildTree(ordered);
   }
+
+  int height(int val) {
+    Node *ptr = root;
+    int height = 0;
+    while (val != ptr->data && ptr) {
+      if (val < ptr->data) {
+        ptr = ptr->left;
+      } else {
+        ptr = ptr->right;
+      }
+      height++;
+    }
+    return (val == ptr->data) ? height : -1;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -292,8 +306,9 @@ int main() {
   }
   cout << endl;
 
-  tree->rebalance();
+  cout << tree->height(1);
+  // tree->rebalance();
 
-  prettyPrint(tree->root);
+  // prettyPrint(tree->root);
   return 0;
 }
