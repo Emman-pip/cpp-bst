@@ -1,15 +1,12 @@
 #include <iostream>
+#include <random>
 #include <vector>
 
 using namespace std;
 
 int main() {
-  vector<int> arr = {1, 2, 3};
-  arr.push_back(4);
-  arr.push_back(5);
-  arr.pop_back();
-  for (int i : arr) {
-    cout << i << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << rand() % 10 << endl;
   }
-  cout << arr[arr.size() - 1];
+  return 0;
 }

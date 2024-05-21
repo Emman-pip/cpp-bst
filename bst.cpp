@@ -16,6 +16,12 @@ struct Node {
   }
 };
 
+// TODO:
+// 1. depth of the tree of a value
+// 2. height of the tree
+// 3. balance the tree
+// 4.
+
 class Tree {
 private:
   Node *buildTree(vector<int> arr) {
@@ -34,13 +40,10 @@ private:
       left = vector<int>(arr.begin(), arr.end() - mid);
       right = vector<int>(arr.begin() + mid + 1, arr.end());
     }
-    // left = vector<int>(arr.begin(), arr.end() - mid - 1);
-    // right = vector<int>(arr.begin() + mid + 1, arr.end());
     Node *root = new Node(arr[mid], buildTree(left), buildTree(right));
     return root;
   }
 
-  // optimize this. Make one function.
   Node *insertBack(int value, Node *node) {
     if (node == NULL) {
       Node *newnode = new Node(value);
@@ -112,23 +115,18 @@ private:
   }
 
   void postorder(Node *ptr, vector<Node *> &stack, vector<int> &res) {
-    // if may nasa left, pasok
     if (ptr) {
       stack.push_back(ptr);
       return postorder(ptr->left, stack, res);
     } else if (stack.size() > 0 && stack[stack.size() - 1]->right) {
       Node *rootPtr = stack[stack.size() - 1];
       vector<Node *> newStack;
-
       stack.pop_back();
       postorder(rootPtr->right, newStack, res);
-
       res.push_back(rootPtr->data);
-
       return postorder(ptr, stack, res);
     } else if (stack.size() > 0) {
       res.push_back(stack[stack.size() - 1]->data);
-      // problem at hindi nappush yung root node
       stack.pop_back();
       return postorder(ptr, stack, res);
     }
@@ -232,6 +230,10 @@ public:
     postorder(ptr, stack, res);
     return res;
   }
+  void rebalance() {
+    vector<int> ordered = inorderTraversal();
+    root = buildTree(ordered);
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -247,17 +249,17 @@ void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
   }
 }
 int main() {
-  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
-  vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+  vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
+  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
   // vector<int> arr = {1, 2, 3};
   //   vector<int> arr = {1, 2, 3, 4, 5, 6, 7};
   Tree *tree = new Tree(arr);
-  // tree->insert(90);
-  // tree->insert(-80);
-  // tree->insert(-20);
-  // tree->insert(-81);
-  // tree->insert(100);
-  // tree->insert(6);
+  tree->insert(90);
+  tree->insert(-80);
+  tree->insert(-20);
+  tree->insert(-81);
+  tree->insert(100);
+  tree->insert(6);
   prettyPrint(tree->root);
   vector<int> bft = tree->breadthFirstTraversal();
 
@@ -289,5 +291,9 @@ int main() {
     cout << i << " ";
   }
   cout << endl;
+
+  tree->rebalance();
+
+  prettyPrint(tree->root);
   return 0;
 }
