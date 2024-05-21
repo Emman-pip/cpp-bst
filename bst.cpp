@@ -90,6 +90,25 @@ private:
     }
   }
 
+  // DF preorder traversal
+  void preorder(Node *ptr, vector<Node *> &stack, vector<int> &res) {
+    if (ptr) {
+      stack.push_back(ptr);
+      res.push_back(ptr->data);
+      ptr = ptr->left;
+      return preorder(ptr, stack, res);
+    } else if (stack.size() > 0 && stack[stack.size() - 1]->right) {
+      ptr = stack[stack.size() - 1]->right;
+      stack.pop_back();
+      return preorder(ptr, stack, res);
+    } else if (stack.size() > 0) {
+      stack.pop_back();
+      return preorder(ptr, stack, res);
+    } else {
+      return;
+    }
+  }
+
 public:
   Node *root;
   Tree(vector<int> arr) { this->root = buildTree(arr); };
@@ -170,6 +189,16 @@ public:
     inorder(ptr, stack, res);
     return res;
   }
+  vector<int> preorderTraversal() {
+    vector<int> res;
+    vector<Node *> stack;
+    Node *ptr = root;
+    preorder(ptr, stack, res);
+    for (Node *i : stack) {
+      res.push_back(i->data);
+    }
+    return res;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -209,10 +238,14 @@ int main() {
   for (int i : inorder) {
     cout << i << " ";
   }
+
+  cout << endl << endl;
+
+  vector<int> preorder = tree->preorderTraversal();
+  cout << "This is the preorder traversal" << endl;
+  for (int i : preorder) {
+    cout << i << " ";
+  }
   cout << endl;
-
-  // Node *eleven = tree->find(6);
-  // cout << eleven->left->data;
-
   return 0;
 }
