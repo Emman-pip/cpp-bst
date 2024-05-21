@@ -23,17 +23,19 @@ private:
       Node *nul = NULL;
       return nul;
     }
-    int mid = ceil(arr.size() / 2);
+    int mid = floor(arr.size() / 2);
     vector<int> right;
     vector<int> left;
 
-    if (mid == 1) {
+    if (arr.size() % 2 == 1) {
       right = vector<int>(arr.begin() + mid + 1, arr.end());
-      left = vector<int>(arr.begin(), arr.end() - mid);
-    } else {
       left = vector<int>(arr.begin(), arr.end() - mid - 1);
+    } else {
+      left = vector<int>(arr.begin(), arr.end() - mid);
       right = vector<int>(arr.begin() + mid + 1, arr.end());
     }
+    // left = vector<int>(arr.begin(), arr.end() - mid - 1);
+    // right = vector<int>(arr.begin() + mid + 1, arr.end());
     Node *root = new Node(arr[mid], buildTree(left), buildTree(right));
     return root;
   }
@@ -107,6 +109,10 @@ private:
     } else {
       return;
     }
+  }
+
+  void postorder(Node *ptr, vector<Node *> &stack, vector<int> &res) {
+    // if may nasa left, pasok
   }
 
 public:
@@ -199,6 +205,13 @@ public:
     }
     return res;
   }
+  vector<int> postorderTraversal() {
+    vector<int> res;
+    vector<Node *> stack;
+    Node *ptr = root;
+    postorder(ptr, stack, res);
+    return res;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -214,15 +227,17 @@ void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
   }
 }
 int main() {
-  vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
+  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
+  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+  vector<int> arr = {1, 2, 3};
+  //   vector<int> arr = {1, 2, 3, 4, 5, 6, 7};
   Tree *tree = new Tree(arr);
-  tree->insert(20);
-  tree->insert(10);
-  tree->insert(0);
-  tree->insert(30);
-  tree->insert(10);
-  tree->insert(-80);
-  tree->insert(11);
+  // tree->insert(90);
+  // tree->insert(-80);
+  // tree->insert(-20);
+  // tree->insert(-81);
+  // tree->insert(100);
+  // tree->insert(6);
   prettyPrint(tree->root);
   vector<int> bft = tree->breadthFirstTraversal();
 
@@ -244,6 +259,13 @@ int main() {
   vector<int> preorder = tree->preorderTraversal();
   cout << "This is the preorder traversal" << endl;
   for (int i : preorder) {
+    cout << i << " ";
+  }
+  cout << endl << endl;
+
+  vector<int> postorder = tree->postorderTraversal();
+  cout << "This is the postorder traversal" << endl;
+  for (int i : postorder) {
     cout << i << " ";
   }
   cout << endl;
