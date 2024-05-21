@@ -113,6 +113,26 @@ private:
 
   void postorder(Node *ptr, vector<Node *> &stack, vector<int> &res) {
     // if may nasa left, pasok
+    if (ptr) {
+      stack.push_back(ptr);
+      return postorder(ptr->left, stack, res);
+    } else if (stack.size() > 0 && stack[stack.size() - 1]->right) {
+      Node *rootPtr = stack[stack.size() - 1];
+      vector<Node *> newStack;
+
+      stack.pop_back();
+      postorder(rootPtr->right, newStack, res);
+
+      res.push_back(rootPtr->data);
+
+      return postorder(ptr, stack, res);
+    } else if (stack.size() > 0) {
+      res.push_back(stack[stack.size() - 1]->data);
+      // problem at hindi nappush yung root node
+      stack.pop_back();
+      return postorder(ptr, stack, res);
+    }
+    return;
   }
 
 public:
@@ -228,8 +248,8 @@ void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
 }
 int main() {
   // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
-  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-  vector<int> arr = {1, 2, 3};
+  vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+  // vector<int> arr = {1, 2, 3};
   //   vector<int> arr = {1, 2, 3, 4, 5, 6, 7};
   Tree *tree = new Tree(arr);
   // tree->insert(90);
