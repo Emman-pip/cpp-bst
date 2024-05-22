@@ -4,9 +4,15 @@
 
 using namespace std;
 
+void addto(int &i) { i++; }
 int main() {
-  for (int i = 0; i < 10; i++) {
-    cout << rand() % 10 << endl;
-  }
+  int i = 0;
+  addto(i);
+  addto(i);
+  addto(i);
+  addto(i);
+  addto(i);
+  addto(i);
+  cout << i << endl;
   return 0;
 }

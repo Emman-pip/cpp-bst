@@ -18,9 +18,9 @@ struct Node {
 
 // TODO:
 // 1. depth of the tree of a value -- number of edges of a node from the root.
-// 2. height of the node -- longest distance of a node from a leaf node.
-// 3. balance the tree
-// 4.
+// 4. is balanced
+// 5. tie it all together ( generate random numbers for the tree, confirm is
+// balanced, print traversals, )
 
 class Tree {
 private:
@@ -131,6 +131,21 @@ private:
       return postorder(ptr, stack, res);
     }
     return;
+  }
+
+  void last(Node *node, int &count) {
+    if (node->left) {
+      count++;
+      last(node->left, count);
+      //
+    }
+    if (node->right) {
+      count++;
+      last(node->right, count);
+    }
+    if (!node) {
+      return;
+    }
   }
 
 public:
@@ -248,6 +263,13 @@ public:
     }
     return (val == ptr->data) ? height : -1;
   }
+  bool isBalanced() {
+    bool balanced;
+    int left = 0, right = 0;
+    last(root->left, left);
+    last(root->right, right);
+    return (max(left, right) - min(left, right) <= 1) ? true : false;
+  }
 };
 
 void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
@@ -274,6 +296,9 @@ int main() {
   tree->insert(-81);
   tree->insert(100);
   tree->insert(6);
+  tree->insert(-1028937);
+  tree->insert(-23);
+  tree->insert(-56);
   prettyPrint(tree->root);
   vector<int> bft = tree->breadthFirstTraversal();
 
@@ -306,8 +331,9 @@ int main() {
   }
   cout << endl;
 
-  cout << tree->height(1);
-  // tree->rebalance();
+  // cout << tree->height(1);
+  tree->rebalance();
+  cout << "is balanced: " << tree->isBalanced();
 
   // prettyPrint(tree->root);
   return 0;
