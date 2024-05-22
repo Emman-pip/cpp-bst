@@ -346,6 +346,7 @@ private:
   }
 
   void setup() {
+    system("clear");
     int size;
     string randomized;
     vector<int> arr;
@@ -416,6 +417,92 @@ private:
     system("sleep 1");
   }
 
+  void getDepth() {
+    system("clear");
+    prettyPrint(tree->root);
+    cout << endl << "Choose a node to search: ";
+    int node;
+    cin >> node;
+    int dep = tree->depth(node);
+    if (dep == -1)
+      cout << "The node does not exist in the tree." << endl;
+    else
+      cout << "The depth of " << node << " is " << dep << endl;
+    cout << endl;
+    system("sleep 3");
+  }
+
+  void rebalanceTree() {
+    system("clear");
+    prettyPrint(tree->root);
+    tree->rebalance();
+    cout << string(60, '*') << endl;
+    prettyPrint(tree->root);
+    cout << "Tree has been rebalanced" << endl;
+    system("sleep 2");
+  }
+
+  void isBalanced() {
+    system("clear");
+    prettyPrint(tree->root);
+    if (tree->isBalanced())
+      cout << "Tree is balanced" << endl;
+    else
+      cout << "Tree is not balanced" << endl;
+    system("sleep 2");
+  }
+
+  void nodeHeight() {
+    system("clear");
+    prettyPrint(tree->root);
+    cout << "Enter the node value: ";
+    int node;
+    cin >> node;
+    cout << "The height of the node (value " << node << ") is "
+         << tree->height(node) << endl;
+    system("sleep 2");
+  }
+
+  void printVector(string title, vector<int> arr) {
+    cout << title << endl;
+    cout << "[ ";
+    for (int i : arr) {
+      cout << i << "  ";
+    }
+    cout << "]" << endl;
+  }
+
+  void traversals() {
+    system("clear");
+    prettyPrint(tree->root);
+    cout << endl;
+    printVector("Inorder traversal", tree->inorderTraversal());
+    cout << endl;
+    printVector("Preorder traversal", tree->preorderTraversal());
+    cout << endl;
+    printVector("Postorder traversal", tree->postorderTraversal());
+    cout << endl;
+
+    system("sleep 10");
+  }
+
+  void searchNode() {
+    system("clear");
+    prettyPrint(tree->root);
+    cout << "Enter the value to search for: ";
+    int node;
+    cin >> node;
+    Node *val = tree->find(node);
+    if (val) {
+      prettyPrint(val);
+      cout << endl
+           << "Node found! The nodes connected are printed above" << endl;
+    } else {
+      cout << "Node does not exist in the tree" << endl;
+    }
+    system("sleep 5");
+  }
+
   void options() {
     bool flag = true;
     while (flag) {
@@ -448,25 +535,25 @@ private:
         deleteItem();
         continue;
       case 3:
-        cout << "Get the depth of a node" << endl;
+        getDepth();
         continue;
       case 4:
-        cout << "Rebalance the tree" << endl;
+        rebalanceTree();
         continue;
       case 5:
-        cout << "Check if the tree is balanced" << endl;
+        isBalanced();
         continue;
       case 6:
-        cout << "Get the height of a node" << endl;
+        nodeHeight();
         continue;
       case 7:
-        cout << "Do depth first traversal algorithms" << endl;
+        traversals();
         continue;
       case 8:
-        cout << "Find a node" << endl;
+        searchNode();
         continue;
       case 9:
-        cout << "Rebuild the tree" << endl;
+        setup();
         continue;
       case 10:
         cout << "Thank you for using this service." << endl;
