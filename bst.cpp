@@ -1,5 +1,6 @@
 #include <cinttypes>
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <vector>
@@ -59,13 +60,20 @@ private:
   void deletePriv(Node *target, Node *prev, bool isLeft) {
     Node *prevPtr = NULL;
     Node *ptr = target->right;
-    while (ptr->left != NULL) {
+    while (ptr) {
+      if (!ptr->left)
+        break;
       prevPtr = ptr;
       ptr = ptr->left;
     }
-    prevPtr->left = ptr->right;
-    ptr->right = target->right;
-    ptr->left = target->left;
+    if (!prevPtr) {
+      (ptr->data < target->left->data) ? ptr->right = target->left
+                                       : ptr->left = target->left;
+    } else {
+      prevPtr->left = ptr->right;
+      ptr->right = target->right;
+      ptr->left = target->left;
+    }
     if (prev) {
       (isLeft) ? prev->left = ptr : prev->right = ptr;
     } else {
@@ -155,7 +163,7 @@ public:
     Node *current = root;
     bool isLeft;
     // loop to find the node
-    while (current->data != value) {
+    while (current && current->data != value) {
       prev = current;
       if (current->data > value) {
         current = current->left;
@@ -165,8 +173,9 @@ public:
       current = current->right;
       isLeft = false;
     }
-    if (!current)
+    if (!current) {
       return false;
+    }
 
     // do with multiple chilren -- DONE
     if (current->left && current->right) {
@@ -295,59 +304,189 @@ void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
     prettyPrint(node->left, prefix + (isLeft ? "    " : "|   "), true);
   }
 }
+void bubbleSort(vector<int> &arr) {
+  int i, prev;
+  bool flag = false;
+  while (!flag) {
+    prev = 0;
+    flag = true;
+    for (i = 1; i < arr.size(); i++) {
+      if (prev >= 0 && arr[prev] > arr[i]) {
+        swap(arr[prev], arr[i]);
+        flag = false;
+      }
+      prev++;
+    }
+    if (flag) {
+      return;
+    }
+  }
+}
+
+class Display {
+private:
+  Tree *tree = NULL;
+  int randomNumberNoRepetition(vector<int> arr, int n) {
+    int randomNum = rand() % n;
+    for (int i = 0; i < arr.size(); i++) {
+      if (i == randomNum) {
+        randomNum = rand();
+      }
+    }
+    return randomNum;
+  }
+
+  bool checkIfRepeating(vector<int> arr, int n) {
+    for (int i : arr) {
+      if (i == n) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void setup() {
+    int size;
+    string randomized;
+    vector<int> arr;
+    cout << "Enter the input size of the initial array (max:1000): " << endl;
+    cin >> size;
+    cout << "Do you want the array values to be randomized?(y/n) ";
+    cin >> randomized;
+    // add error catching here
+    bool random = (randomized == "n") ? false : true;
+
+    if (!random) {
+      cout
+          << "Enter the values for your BST (repeating values are not allowed)."
+          << endl;
+      for (int i = 0; i < size; i++) {
+        int val;
+        cout << "Enter value #" << i + 1 << ": ";
+        cin >> val;
+
+        if (checkIfRepeating(arr, val)) {
+          cout << "Repeating values are not allowd. Enter another value"
+               << endl;
+          i--;
+          continue;
+        }
+
+        arr.push_back(val);
+      }
+    } else {
+      cout << "The values generated will mostly be in between 0 and 1000"
+           << endl;
+      for (int i = 0; i < size; i++) {
+        int randomNum = randomNumberNoRepetition(arr, 1000);
+        arr.push_back(randomNum);
+      }
+    }
+    bubbleSort(arr);
+    tree = new Tree(arr);
+  }
+
+  void deleteItem() {
+    system("clear");
+    cout << endl << "Choose a node (number) to delete: ";
+    int node;
+    cin >> node;
+    bool flag = tree->deleteNode(node);
+    cout << flag << endl;
+    if (flag) {
+      cout << "Node containing the value " << node << " was deleted." << endl;
+    } else {
+      cout << "The node containing the value " << node << " does not exist"
+           << endl;
+    }
+    cout << endl;
+    cout << endl;
+    system(R"(read -p "press any key to continue...")");
+  }
+
+  void options() {
+    bool flag = true;
+    while (flag) {
+      system("clear");
+      prettyPrint(tree->root);
+      cout << "^^^^^^ Generated Binary Search Tree ^^^^^^" << endl;
+      cout << "Actions: " << endl;
+      cout << "1. Insert new values to the tree." << endl;
+      cout << "2. Delete nodes." << endl;
+      cout << "3. Get Depth of a node." << endl;
+      cout << "4. Rebalance the tree." << endl;
+      cout << "5. Check if the tree is balanced." << endl;
+      cout << "6. Get the height of the node." << endl;
+      cout << "7. See depth first traversals (inorder, preorder, and postorder "
+              "traversals)."
+           << endl;
+      cout << "8. Find a node." << endl;
+      cout << "9. Rebuild the tree." << endl;
+      cout << "10.Exit" << endl;
+
+      int choice;
+      cout << endl << "Choose: " << endl;
+      cin >> choice;
+
+      switch (choice) {
+      case 1:
+        cout << "Insert new val" << endl;
+        continue;
+      case 2:
+        system("clear");
+        prettyPrint(tree->root);
+        cout << endl << "Choose a node (number) to delete: ";
+        int node;
+        cin >> node;
+        if (tree->deleteNode(node)) {
+          cout << "Node containing the value " << node << " was deleted."
+               << endl;
+        } else {
+          cout << "The node containing the value " << node << " does not exist"
+               << endl;
+        }
+        system("read -p Press any key to continue...");
+        continue;
+      case 3:
+        cout << "Get the depth of a node" << endl;
+        continue;
+      case 4:
+        cout << "Rebalance the tree" << endl;
+        continue;
+      case 5:
+        cout << "Check if the tree is balanced" << endl;
+        continue;
+      case 6:
+        cout << "Get the height of a node" << endl;
+        continue;
+      case 7:
+        cout << "Do depth first traversal algorithms" << endl;
+        continue;
+      case 8:
+        cout << "Find a node" << endl;
+        continue;
+      case 9:
+        cout << "Rebuild the tree" << endl;
+        continue;
+      case 10:
+        cout << "Thank you for using this service." << endl;
+        flag = false;
+        break;
+      default:
+        cout << "Invalid input." << endl;
+        flag = false;
+        break;
+      }
+    }
+  }
+
+public:
+  Display() {
+    setup();
+    options();
+  }
+};
 int main() {
-  vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 3289};
-  // vector<int> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-  // vector<int> arr = {1, 2, 3};
-  //   vector<int> arr = {1, 2, 3, 4, 5, 6, 7};
-  Tree *tree = new Tree(arr);
-  tree->insert(90);
-  tree->insert(-80);
-  tree->insert(-20);
-  tree->insert(-81);
-  tree->insert(100);
-  tree->insert(6);
-  tree->insert(-1028937);
-  tree->insert(-23);
-  tree->insert(-56);
-  prettyPrint(tree->root);
-  vector<int> bft = tree->breadthFirstTraversal();
-
-  cout << "This is the breadthFirstTraversal: " << endl;
-  for (int i : bft) {
-    cout << i << " ";
-  }
-
-  cout << endl << endl;
-
-  vector<int> inorder = tree->inorderTraversal();
-  cout << "This is the inorder traversal" << endl;
-  for (int i : inorder) {
-    cout << i << " ";
-  }
-
-  cout << endl << endl;
-
-  vector<int> preorder = tree->preorderTraversal();
-  cout << "This is the preorder traversal" << endl;
-  for (int i : preorder) {
-    cout << i << " ";
-  }
-  cout << endl << endl;
-
-  vector<int> postorder = tree->postorderTraversal();
-  cout << "This is the postorder traversal" << endl;
-  for (int i : postorder) {
-    cout << i << " ";
-  }
-  cout << endl;
-
-  // cout << tree->height(1);
-  // tree->rebalance();
-  cout << "is balanced: " << tree->isBalanced() << endl;
-  prettyPrint(tree->root);
-  cout << "depth: " << tree->depth(6) << endl;
-
-  // prettyPrint(tree->root);
+  Display();
   return 0;
 }
