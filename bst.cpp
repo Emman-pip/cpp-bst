@@ -299,7 +299,7 @@ void prettyPrint(Node *node, string prefix = "", bool isLeft = true) {
   if (node->right) {
     prettyPrint(node->right, prefix + (isLeft ? "|   " : "    "), false);
   }
-  cout << prefix << (isLeft ? "└── " : "┌── ") + to_string(node->data) << endl;
+  cout << prefix << (isLeft ? "|--" : "|--") << node->data << endl;
   if (node->left) {
     prettyPrint(node->left, prefix + (isLeft ? "    " : "|   "), true);
   }
@@ -346,7 +346,7 @@ private:
   }
 
   void setup() {
-    system("clear");
+    system("CLS");
     int size;
     string randomized;
     vector<int> arr;
@@ -388,7 +388,7 @@ private:
   }
 
   void deleteItem() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << endl << "Choose a node (number) to delete: ";
     int node;
@@ -401,11 +401,11 @@ private:
            << endl;
     }
     cout << endl;
-    system("sleep 1");
+    system("pause");
   }
 
   void insertItem() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << "Duplicated are not allowed." << endl;
     cout << endl << "Choose a number to insert: ";
@@ -414,11 +414,11 @@ private:
     bool flag = tree->insert(node);
     cout << "Insertion successful" << endl;
     cout << endl;
-    system("sleep 1");
+    system("pause");
   }
 
   void getDepth() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << endl << "Choose a node to search: ";
     int node;
@@ -429,38 +429,38 @@ private:
     else
       cout << "The depth of " << node << " is " << dep << endl;
     cout << endl;
-    system("sleep 3");
+    system("pause");
   }
 
   void rebalanceTree() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     tree->rebalance();
     cout << string(60, '*') << endl;
     prettyPrint(tree->root);
     cout << "Tree has been rebalanced" << endl;
-    system("sleep 2");
+    system("pause");
   }
 
   void isBalanced() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     if (tree->isBalanced())
       cout << "Tree is balanced" << endl;
     else
       cout << "Tree is not balanced" << endl;
-    system("sleep 2");
+    system("pause");
   }
 
   void nodeHeight() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << "Enter the node value: ";
     int node;
     cin >> node;
     cout << "The height of the node (value " << node << ") is "
          << tree->height(node) << endl;
-    system("sleep 2");
+    system("pause");
   }
 
   void printVector(string title, vector<int> arr) {
@@ -473,7 +473,7 @@ private:
   }
 
   void traversals() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << endl;
     printVector("Inorder traversal", tree->inorderTraversal());
@@ -483,11 +483,11 @@ private:
     printVector("Postorder traversal", tree->postorderTraversal());
     cout << endl;
 
-    system("sleep 10");
+    system("pause");
   }
 
   void searchNode() {
-    system("clear");
+    system("CLS");
     prettyPrint(tree->root);
     cout << "Enter the value to search for: ";
     int node;
@@ -500,13 +500,13 @@ private:
     } else {
       cout << "Node does not exist in the tree" << endl;
     }
-    system("sleep 5");
+    system("pause");
   }
 
   void options() {
     bool flag = true;
     while (flag) {
-      system("clear");
+      system("CLS");
       prettyPrint(tree->root);
       cout << "^^^^^^ Generated Binary Search Tree ^^^^^^" << endl;
       cout << "Actions: " << endl;
