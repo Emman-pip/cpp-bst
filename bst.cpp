@@ -155,7 +155,7 @@ private:
 public:
   Node *root;
   Tree(vector<int> arr) { this->root = buildTree(arr); };
-  bool insert(int value) { return this->insertBack(value, root); };
+  bool insert(int value) { return this->insertBack(value, root); }
   // create the delete node functionality
   bool deleteNode(int value) {
     // save the prev, direction, and the current node
@@ -388,11 +388,11 @@ private:
 
   void deleteItem() {
     system("clear");
+    prettyPrint(tree->root);
     cout << endl << "Choose a node (number) to delete: ";
     int node;
     cin >> node;
     bool flag = tree->deleteNode(node);
-    cout << flag << endl;
     if (flag) {
       cout << "Node containing the value " << node << " was deleted." << endl;
     } else {
@@ -400,8 +400,20 @@ private:
            << endl;
     }
     cout << endl;
+    system("sleep 1");
+  }
+
+  void insertItem() {
+    system("clear");
+    prettyPrint(tree->root);
+    cout << "Duplicated are not allowed." << endl;
+    cout << endl << "Choose a number to insert: ";
+    int node;
+    cin >> node;
+    bool flag = tree->insert(node);
+    cout << "Insertion successful" << endl;
     cout << endl;
-    system(R"(read -p "press any key to continue...")");
+    system("sleep 1");
   }
 
   void options() {
@@ -430,22 +442,10 @@ private:
 
       switch (choice) {
       case 1:
-        cout << "Insert new val" << endl;
+        insertItem();
         continue;
       case 2:
-        system("clear");
-        prettyPrint(tree->root);
-        cout << endl << "Choose a node (number) to delete: ";
-        int node;
-        cin >> node;
-        if (tree->deleteNode(node)) {
-          cout << "Node containing the value " << node << " was deleted."
-               << endl;
-        } else {
-          cout << "The node containing the value " << node << " does not exist"
-               << endl;
-        }
-        system("read -p Press any key to continue...");
+        deleteItem();
         continue;
       case 3:
         cout << "Get the depth of a node" << endl;
